@@ -1,4 +1,4 @@
-Assignment for Bluejay Delivery Internship (due 21st Jan 2024). The Code is in **Main.java** file.
+Assignment for Bluejay Delivery Internship (due 21st Jan 2024). The Code is in **App.java** file.
 
 
 
