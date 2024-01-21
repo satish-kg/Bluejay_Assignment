@@ -1,4 +1,4 @@
-Assignment for Bluejay Delivery Internship (due 21st Jan 2024). The Code is in **App.java** file.
+Assignment for Bluejay Delivery Internship (due 21st Jan 2024). The Code is in [**App.java**](https://github.com/satish-kg/Bluejay_Assignment/blob/main/src/main/java/org/example/App.java) file.
 
 
 
