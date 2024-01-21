@@ -106,7 +106,10 @@ public class Main {
             ShiftTimeDifferenceData shiftTimeDifferenceData = hasTimeBetweenShifts(dates);
 //            Performing check to print only correct and required enties
             if(shiftTimeDifferenceData.timeDifference != -1){
-                System.out.println("Name : "+ entry.getKey()+", Position : "+employeeNameAndPositionMap.get(entry.getKey())+", Time Difference : "+shiftTimeDifferenceData.timeDifference+", InTime of shift : "+shiftTimeDifferenceData.inTime+", OutTime of previous shift :  "+ shiftTimeDifferenceData.outTime);
+//                Required output
+                System.out.println("Name : "+ entry.getKey()+", Position : "+employeeNameAndPositionMap.get(entry.getKey()));
+//                Output containing employee name, position, time difference, in-timme and out-time
+//                System.out.println("Name : "+ entry.getKey()+", Position : "+employeeNameAndPositionMap.get(entry.getKey())+", Time Difference : "+shiftTimeDifferenceData.timeDifference+", InTime of shift : "+shiftTimeDifferenceData.inTime+", OutTime of previous shift :  "+ shiftTimeDifferenceData.outTime);
             }
         }
 
@@ -120,7 +123,9 @@ public class Main {
             ShiftTimeDifferenceData shiftTimeDifferenceData = hasHoursInSingleShift(dates);
 //            Performing check to print only correct and required enties
             if (shiftTimeDifferenceData.timeDifference != -1) {
-                System.out.println("Name : "+ entry.getKey()+", Position : "+employeeNameAndPositionMap.get(entry.getKey())+", Time Difference : "+shiftTimeDifferenceData.timeDifference+", InTime of shift : "+shiftTimeDifferenceData.inTime+", OutTime of shift :  "+ shiftTimeDifferenceData.outTime);
+                System.out.println("Name : "+ entry.getKey()+", Position : "+employeeNameAndPositionMap.get(entry.getKey()));
+//                Output containing employee name, position, time difference, in-timme and out-time
+//                System.out.println("Name : "+ entry.getKey()+", Position : "+employeeNameAndPositionMap.get(entry.getKey())+", Time Difference : "+shiftTimeDifferenceData.timeDifference+", InTime of shift : "+shiftTimeDifferenceData.inTime+", OutTime of previous shift :  "+ shiftTimeDifferenceData.outTime);
             }
         }
     }
@@ -130,19 +135,23 @@ public class Main {
     private static boolean hasConsecutiveDays (int n, List<Date> dates) {
 //         Creating an object of custom class 'ShiftTimeDifferenceData to retrieve time data such as 'time difference', 'in-time' and 'out-time'
         ShiftTimeDifferenceData shiftTimeDifferenceData = new ShiftTimeDifferenceData();
-//        As we need 'n' consecutive days of attendance, the
-        if (dates.size() < n) {
+//        As we need 'n' consecutive days of attendance, the date-list size must be at least '2n' as date-list contains both 'int-time' and 'out-time'.
+        if (dates.size() < 14) {
             return false;
         }
 
+//        Creating a simple date format object to format the dates
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        Creating a set to created newly formatted and unique dates
         Set<String> consecutiveDaysSet = new HashSet<>();
 
+//        Putting dates in date-set after formatting
         for (Date date : dates) {
             String formattedDate = dateFormat.format(date);
             consecutiveDaysSet.add(formattedDate);
         }
 
+//        sending int 'n' and date-set to other function to verifiy if employee has attended office for 'n' consecutive days.
         if (hasN_consecutiveDays(n, consecutiveDaysSet)) {
             return true;
         }
@@ -150,24 +159,35 @@ public class Main {
     }
 
     private static boolean hasN_consecutiveDays (int n, Set<String> dateSet) {
+//        Creating instance of java.util.Calendar
         Calendar calendar = Calendar.getInstance();
 
+//        Iterating through set of dates to check for 'n' consecutive dates.
         for (String date : dateSet) {
             try {
+//                Setting calendar's time with date of 'dateset'
                 calendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(date));
+//                Counter for consecutive days count
                 int consecutiveDaysCount = 0;
 
+//                Iterating over a for loop 7 times
                 for (int i = 1; i <= n; i++) {
+//                    Setting calendar's time one day ahead of current date from 'dateset'
                     calendar.add(Calendar.DAY_OF_YEAR, 1);
+//                    Parsing this one day ahead time from calendar as string
                     String nextDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
 
+//                    Checking if the 'dateset' contains this 'one day ahead' date
                     if (dateSet.contains(nextDate)) {
+//                        if yes, we increase consecutive days counter by 1
                         consecutiveDaysCount++;
                     } else {
-                        break;
+//                        if no, we reset the counter to 0 and continue to iterate through dates from 'dateset'
+                        consecutiveDaysCount = 0;
                     }
                 }
 
+//                If the counter reaches count of 'n', we return true
                 if (consecutiveDaysCount == n) {
                     return true;
                 }
@@ -175,6 +195,7 @@ public class Main {
                 e.printStackTrace();
             }
         }
+//        returning false as employee hadn't attended office for 7 consecutive days.
         return false;
     }
 
@@ -185,6 +206,7 @@ public class Main {
 //            System.out.println(dates.get(i));
             long diffInSeconds = (dates.get(i).getTime() - dates.get(i-1).getTime()) / 1000;
             if (diffInSeconds > 3600 && diffInSeconds < 10 * 3600) {
+//                Setting time-difference, in-time and out-time in return object.
                 shiftTimeDifferenceData.timeDifference = diffInSeconds;
                 shiftTimeDifferenceData.inTime = dates.get(i+1);
                 shiftTimeDifferenceData.outTime = dates.get(i);
@@ -199,8 +221,10 @@ public class Main {
         // Implement logic to check hours in a single shift
         ShiftTimeDifferenceData shiftTimeDifferenceData = new ShiftTimeDifferenceData();
         for (int i = 1; i < dates.size(); i += 2) {
+//            Setting time-difference in return object
             shiftTimeDifferenceData.timeDifference = ((dates.get(i).getTime() - dates.get(i-1).getTime()) / (3600*1000));
             if (shiftTimeDifferenceData.timeDifference > 14) {
+//                Setting in-time and out-time in return object.
                 shiftTimeDifferenceData.inTime = dates.get(i-1);
                 shiftTimeDifferenceData.outTime = dates.get(i);
                 return shiftTimeDifferenceData;
